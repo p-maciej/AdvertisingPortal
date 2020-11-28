@@ -1,0 +1,44 @@
+﻿@model IEnumerable<AdvertisingPortal.Models.FileModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(Model => Model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Path)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Advertisement)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.AddTime)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+    <tr>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Path)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Advertisement)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddTime)
+        </td>
+    </tr>
+    }
+</table>
+

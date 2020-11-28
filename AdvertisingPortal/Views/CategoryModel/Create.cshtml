@@ -1,0 +1,15 @@
+﻿@model AdvertisingPortal.Models.CategoryModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+@using (Html.BeginForm("Create", "CategoryModel", FormMethod.Post)) {
+    <table>
+        <tr><td>Category name:</td><td>@Html.TextBoxFor(m => m.Name)</td></tr>
+        <tr><td>Parent:</td><td>@Html.TextBoxFor(m => m.Parent)</td></tr>
+        <tr><td></td><td><input type="submit" value="Add" /></td></tr>
+    </table>
+}

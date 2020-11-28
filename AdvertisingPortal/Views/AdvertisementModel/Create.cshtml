@@ -1,0 +1,17 @@
+﻿@model AdvertisingPortal.Models.AdvertisementModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Create</h2>
+@using (Html.BeginForm("Create", "AdvertisementModel", FormMethod.Post)) {
+    <table>
+        <tr><td>Title:</td><td>@Html.TextBoxFor(m => m.Title)</td></tr>
+        <tr><td>Content:</td><td>@Html.TextBoxFor(m => m.Content)</td></tr>
+        <tr><td>Price:</td><td>@Html.TextBoxFor(m => m.Price)</td></tr>
+        <tr><td>To negotiate:</td><td>@Html.CheckBoxFor(m => m.ToNegotiate)</td></tr>
+        <tr><td></td><td><input type="submit" value="Add" /></td></tr>
+    </table>
+}

@@ -1,0 +1,72 @@
+﻿@model IEnumerable<AdvertisingPortal.Models.AdvertisementModel>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(Model => Model.ID)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Content)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.ToNegotiate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.AddTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.CloseTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.Active)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model) {
+    <tr>
+
+        <td>
+            @Html.DisplayFor(modelItem => item.ID)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Content)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ToNegotiate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.AddTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CloseTime)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Active)
+        </td>
+    </tr>
+    }
+
+</table>
