@@ -81,7 +81,7 @@ namespace AdvertisingPortal.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirm(int id) {
+        public ActionResult Delete(int id) {
             if (ModelState.IsValid) {
                 CategoryModel category = db.Categories.Find(id);
                 try {

@@ -29,5 +29,59 @@ namespace AdvertisingPortal.Controllers {
             }
             return View(userModel);
         }
+
+        public ActionResult Edit(int id) {
+            UserModel usr = db.Users.Where(s => s.ID == id).FirstOrDefault();
+
+            return View(usr);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(UserModel user) {
+            if (ModelState.IsValid) {
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+
+                return RedirectToAction("Index");
+            }
+            return View(user);
+        }
+
+        public ActionResult Delete(int? id) {
+            if (id == 0) {
+                ViewBag.Message = String.Format("Category don't exist.");
+                return View(new UserModel());
+            }
+
+            UserModel user = db.Users.Find(id);
+
+            if (user == null) {
+                return HttpNotFound();
+            }
+            return View(user);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id) {
+            if (ModelState.IsValid) {
+                UserModel user = db.Users.Find(id);
+                try {
+                    db.Users.Remove(user);
+                    db.SaveChanges();
+                }
+                catch {
+                    ViewBag.Message = String.Format("Cannot delete this category.");
+                    return View(user);
+                }
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult Details(int id) {
+            UserModel usr = db.Users.Where(s => s.ID == id).FirstOrDefault();
+
+            return View(usr);
+        }
     }
 }
