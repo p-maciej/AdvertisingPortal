@@ -252,7 +252,6 @@
     <Content Include="Views\UserModel\Index.cshtml" />
     <Content Include="Views\UserModel\Create.cshtml" />
     <Content Include="Views\AdvertisementModel\Index.cshtml" />
-    <Content Include="Views\AdvertisementModel\Create.cshtml" />
     <Content Include="Views\CategoryModel\Index.cshtml" />
     <Content Include="Views\CategoryModel\Create.cshtml" />
     <Content Include="Views\FavouriteModel\Index.cshtml" />
@@ -262,6 +261,8 @@
     <Content Include="Views\UserModel\Delete.cshtml" />
     <Content Include="Views\CategoryModel\Delete.cshtml" />
     <Content Include="Views\UserModel\Details.cshtml" />
+    <Content Include="Views\AdvertisementModel\Create.cshtml" />
+    <Content Include="Views\AdvertisementModel\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

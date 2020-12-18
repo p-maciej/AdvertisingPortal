@@ -14,7 +14,7 @@ namespace AdvertisingPortal.Models {
         [Required]
         public string Content { get; set; }
         [Required]
-        public float Price { get; set; }
+        public decimal Price { get; set; }
         [Required]
         public bool ToNegotiate { get; set; }
         [Required]
