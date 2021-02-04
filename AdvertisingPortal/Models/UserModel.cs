@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -12,14 +13,24 @@ namespace AdvertisingPortal.Models {
         [Key]
         public string ID { get; set; }
         [Required]
+        [DisplayName("First name")]
         public string FirstName { get; set; }
         [Required]
+        [DisplayName("Last name")]
         public string LastName { get; set; }
+        [DisplayName("Phone number")]
         public int PhoneNumber { get; set; }
+        [DisplayName("City")]
         public string City { get; set; }
 
         public virtual ICollection<AdvertisementModel> Advertisements { get; set; }
         public virtual ICollection<FavouriteModel> Favourites { get; set; }
+    }
+
+    public class UserRoleViewModel {
+        public string RoleId { get; set; }
+        public string RoleName { get; set; }
+        public bool IsSelected { get; set; }
     }
 
     public class RegisterUserModel {

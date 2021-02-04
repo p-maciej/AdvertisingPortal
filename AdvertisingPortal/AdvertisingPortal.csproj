@@ -258,7 +258,7 @@
     <Content Include="Views\FileModel\Index.cshtml" />
     <Content Include="Views\CategoryModel\Edit.cshtml" />
     <Content Include="Views\UserModel\Edit.cshtml" />
-    <Content Include="Views\UserModel\Delete.cshtml" />
+    <Content Include="Views\UserModel\ConfirmDelete.cshtml" />
     <Content Include="Views\CategoryModel\Delete.cshtml" />
     <Content Include="Views\UserModel\Details.cshtml" />
     <Content Include="Views\AdvertisementModel\Create.cshtml" />
