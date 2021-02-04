@@ -1,27 +1,31 @@
-﻿@model IEnumerable<AdvertisingPortal.Models.UserModel>
+﻿@model IEnumerable<AdvertisingPortal.Models.CompleteUserModel>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
+<h2>Użytkownicy</h2>
 <br />
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(Model => Model.FirstName)
+            @Html.DisplayNameFor(Model => Model.user.Id)
         </th>
         <th>
-            @Html.DisplayNameFor(Model => Model.LastName)
+            @Html.DisplayNameFor(Model => Model.user.Email)
         </th>
         <th>
-            @Html.DisplayNameFor(Model => Model.PhoneNumber)
+            @Html.DisplayNameFor(Model => Model.userInfo.FirstName)
         </th>
         <th>
-            @Html.DisplayNameFor(Model => Model.Email)
+            @Html.DisplayNameFor(Model => Model.userInfo.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.userInfo.PhoneNumber)
+        </th>
+        <th>
+            @Html.DisplayNameFor(Model => Model.userInfo.City)
         </th>
         <th></th>
     </tr>
@@ -29,21 +33,27 @@
     @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.FirstName)
+            @Html.DisplayFor(modelItem => item.user.Id)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.LastName)
+            @Html.DisplayFor(modelItem => item.user.Email)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.PhoneNumber)
+            @Html.DisplayFor(modelItem => item.userInfo.FirstName)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Email)
+            @Html.DisplayFor(modelItem => item.userInfo.LastName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+            @Html.DisplayFor(modelItem => item.userInfo.PhoneNumber)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.userInfo.City)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.user.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = item.user.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.user.Id })
         </td>
     </tr>
     }

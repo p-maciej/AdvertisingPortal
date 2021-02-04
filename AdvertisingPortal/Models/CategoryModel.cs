@@ -8,6 +8,7 @@ using System.Web;
 namespace AdvertisingPortal.Models {
     [Table("Categories")]
     public class CategoryModel {
+        [Key]
         public int ID { get; set; }
         public int? Parent { get; set; }
         [Required]

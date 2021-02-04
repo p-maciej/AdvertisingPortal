@@ -75,5 +75,36 @@ namespace AdvertisingPortal.Controllers
             }
             return View(advertisement);
         }
+
+        public ActionResult Delete(int? id) {
+            if (id == 0) {
+                ViewBag.Message = String.Format("Advertisement doesn't exist.");
+                return View(new AdvertisementModel());
+            }
+
+            AdvertisementModel advertisement = db.Advertisements.Find(id);
+
+            if (advertisement == null) {
+                return HttpNotFound();
+            }
+            return View(advertisement);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id) {
+            if (ModelState.IsValid) {
+                AdvertisementModel advertisement = db.Advertisements.Find(id);
+                try {
+                    db.Advertisements.Remove(advertisement);
+                    db.SaveChanges();
+                }
+                catch {
+                    ViewBag.Message = String.Format("Cannot delete this advertisement.");
+                    return View(advertisement);
+                }
+            }
+            return RedirectToAction("Index");
+        }
     }
 }

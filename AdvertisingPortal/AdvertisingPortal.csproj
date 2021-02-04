@@ -183,7 +183,7 @@
     <Compile Include="Models\AdvertisementModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Models\FavouriteModel.cs" />
-    <Compile Include="Models\FavouriteModelController.cs" />
+    <Compile Include="Controllers\FavouriteModelController.cs" />
     <Compile Include="Models\FileModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -263,6 +263,7 @@
     <Content Include="Views\UserModel\Details.cshtml" />
     <Content Include="Views\AdvertisementModel\Create.cshtml" />
     <Content Include="Views\AdvertisementModel\Edit.cshtml" />
+    <Content Include="Views\AdvertisementModel\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

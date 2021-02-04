@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using AdvertisingPortal.Models;
+using AdvertisingPortal.DAL;
 
 namespace AdvertisingPortal.Controllers
 {
@@ -17,6 +18,7 @@ namespace AdvertisingPortal.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private AdvertisementPortalContext db = new AdvertisementPortalContext();
 
         public AccountController()
         {
@@ -147,21 +149,19 @@ namespace AdvertisingPortal.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Register(RegisterViewModel model)
+        public async Task<ActionResult> Register(RegisterUserModel model)
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
+                var user = new ApplicationUser { UserName = model.registerInfo.Email, Email = model.registerInfo.Email };
+                var result = await UserManager.CreateAsync(user, model.registerInfo.Password);
+
+                UserModel userInfo = new UserModel { ID = user.Id, FirstName = model.userInfo.FirstName, LastName = model.userInfo.LastName, PhoneNumber = model.userInfo.PhoneNumber, City = model.userInfo.City };
+                db.Users.Add(userInfo);
+                db.SaveChanges();
+
+                if (result.Succeeded) {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit https://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
                     return RedirectToAction("Index", "Home");
                 }

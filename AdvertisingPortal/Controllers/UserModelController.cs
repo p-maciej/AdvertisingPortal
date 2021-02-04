@@ -6,14 +6,24 @@ using System.Web;
 using System.Web.Mvc;
 using AdvertisingPortal.DAL;
 using AdvertisingPortal.Models;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace AdvertisingPortal.Controllers {
+    
     public class UserModelController : Controller {
         private AdvertisementPortalContext db = new AdvertisementPortalContext();
+        private ApplicationDbContext appdb = new ApplicationDbContext();
 
         public ActionResult Index() {
-            DbSet<UserModel> users = db.Users;
-            return View(users.ToList());
+            List<CompleteUserModel> list = new List<CompleteUserModel>();
+            var users = appdb.Users;
+            foreach (IdentityUser user in users) {
+                UserModel userInfo = db.Users.Find(user.Id);
+
+                list.Add(new CompleteUserModel(user, userInfo));
+            }
+            return View(list);
         }
 
         public ActionResult Create() {
@@ -21,7 +31,7 @@ namespace AdvertisingPortal.Controllers {
         }
 
         [HttpPost]
-        public ActionResult Create([Bind(Include = "FirstName, LastName, PhoneNumber, Email, City")] UserModel userModel) { 
+        public ActionResult Create([Bind(Include = "FirstName, LastName, PhoneNumber, City")] UserModel userModel) { 
             if(ModelState.IsValid) {
                 db.Users.Add(userModel);
                 db.SaveChanges();
@@ -30,7 +40,7 @@ namespace AdvertisingPortal.Controllers {
             return View(userModel);
         }
 
-        public ActionResult Edit(int id) {
+        public ActionResult Edit(string id) {
             UserModel usr = db.Users.Where(s => s.ID == id).FirstOrDefault();
 
             return View(usr);
@@ -78,7 +88,7 @@ namespace AdvertisingPortal.Controllers {
             return RedirectToAction("Index");
         }
 
-        public ActionResult Details(int id) {
+        public ActionResult Details(string id) {
             UserModel usr = db.Users.Where(s => s.ID == id).FirstOrDefault();
 
             return View(usr);
