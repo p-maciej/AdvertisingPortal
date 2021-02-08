@@ -12,9 +12,16 @@ namespace AdvertisingPortal.Controllers
 {
     public class CategoryModelController : Controller {
         private AdvertisementPortalContext db = new AdvertisementPortalContext();
-        public ActionResult Index() {
-            DbSet<CategoryModel> categories = db.Categories;
-            return View(categories.ToList());
+        public ActionResult Index(int? id) {
+            IQueryable<CategoryModel> categories;
+
+            if (id != null) {
+                categories = db.Categories.Where(c => c.Parent == id);
+                return View(categories.ToList());
+            } else {
+                categories = db.Categories.Where(c => c.Parent == null);
+                return View(categories.ToList());
+            }     
         }
 
         public ActionResult AdminView() {

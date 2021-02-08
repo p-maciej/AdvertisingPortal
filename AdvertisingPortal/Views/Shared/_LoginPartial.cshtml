@@ -8,7 +8,7 @@
 <ul class="nav navbar-nav navbar-right">
     <li>@Html.ActionLink("Dodaj ogłoszenie +", "Create", "AdvertisementModel")</li>
     <li>
-        @Html.ActionLink("Witaj, " + User.Identity.GetUserName() + "!", "Index", "Manage", routeValues: null, htmlAttributes: new { title = "Manage" })
+        @Html.ActionLink("Witaj, " + User.Identity.GetUserName() + "!", "UserDetails", "Home", routeValues: null, htmlAttributes: new { title = "Zarządzaj kontem" })
     </li>
     <li><a href="javascript:document.getElementById('logoutForm').submit()">Wyloguj</a></li>
 </ul>
