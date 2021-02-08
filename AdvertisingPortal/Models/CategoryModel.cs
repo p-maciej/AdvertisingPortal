@@ -16,4 +16,15 @@ namespace AdvertisingPortal.Models {
 
         public virtual ICollection<AdvertisementModel> Advertisements { get; set; }
     }
+    public class CategoryAdvertisementsModel {
+        public List<CategoryModel> categories { get; set; }
+        public List<AdvertisementModel> advertisements { get; set; }
+
+        public CategoryAdvertisementsModel() { }
+
+        public CategoryAdvertisementsModel(List<CategoryModel> categories, List<AdvertisementModel> advertisements) {
+            this.categories = categories;
+            this.advertisements = advertisements;
+        }
+    }
 }

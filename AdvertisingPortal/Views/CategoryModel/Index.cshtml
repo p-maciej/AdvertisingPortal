@@ -1,12 +1,45 @@
-﻿@model IEnumerable<AdvertisingPortal.Models.CategoryModel>
+﻿@model AdvertisingPortal.Models.CategoryAdvertisementsModel
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <br />
-    <ul>
-        @foreach (var item in Model) { 
-            <li><a href="/CategoryModel/Index/@item.ID">@item.Name</a></li>
+<ul>
+    @foreach (var item in Model.categories) {
+        <li><a href="/CategoryModel/Index/@item.ID">@item.Name</a></li>
     }
-    </ul>
+</ul>
+
+@if (ViewBag.display) {
+    <h2>
+        Ogłoszenia
+    </h2>
+    <table class="table">
+        <tr>
+            <th>
+                Ogłoszenie
+            </th>
+            <th>
+                Cena
+            </th>
+        </tr>
+
+        @foreach (var item in Model.advertisements) {
+            <tr>
+                <td>
+                    @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                    @if (item.ToNegotiate == true) {
+                        @Html.Raw(" do negocjacji");
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+} else {
+    <h2>Brak ogłoszeń</h2>
+}

@@ -17,11 +17,20 @@ namespace AdvertisingPortal.Controllers
 
             if (id != null) {
                 categories = db.Categories.Where(c => c.Parent == id);
-                return View(categories.ToList());
             } else {
                 categories = db.Categories.Where(c => c.Parent == null);
-                return View(categories.ToList());
-            }     
+            }
+
+            var advertisements = db.Advertisements.Where(a => a.Active == true && a.Category.ID == id).OrderByDescending(b => b.AddTime);
+
+            if (advertisements.Count() > 0) {
+                ViewBag.display = true;
+            }
+            else {
+                ViewBag.display = false;
+            }
+
+            return View(new CategoryAdvertisementsModel(categories.ToList(), advertisements.ToList()));
         }
 
         public ActionResult AdminView() {
