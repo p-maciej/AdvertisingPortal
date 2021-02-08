@@ -54,13 +54,24 @@ namespace AdvertisingPortal.Controllers
         public ActionResult Edit(int id) {
             AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).FirstOrDefault();
 
-            List<SelectListItem> cat1 = new List<SelectListItem>();
+            IdentityUser user = appdb.Users.Where(s => s.UserName == User.Identity.Name).First();
 
-            foreach (CategoryModel item in db.Categories.ToList()) {
-                cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString(), Selected = (ad.Category != null && ad.Category.ID == item.ID ? true : false) });
+            if (user.Id == ad.User.ID || userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator")) {
+                List<SelectListItem> cat1 = new List<SelectListItem>();
+
+                foreach (CategoryModel item in db.Categories.ToList()) {
+                    cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString(), Selected = (ad.Category != null && ad.Category.ID == item.ID ? true : false) });
+                }
+                ViewBag.categories = cat1;
+                return View(ad);
+            } else {
+                return RedirectToAction("AccessDanied", "Errors");
             }
+           
+        }
 
-            ViewBag.categories = cat1;
+        public ActionResult Details(int id) {
+            AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).FirstOrDefault();
 
             return View(ad);
         }

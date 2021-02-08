@@ -13,8 +13,8 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace AdvertisingPortal.Controllers {
     [Authorize(Roles = "admin")]    
     public class UserModelController : Controller {
-        private AdvertisementPortalContext db = new AdvertisementPortalContext();
-        private ApplicationDbContext appdb = new ApplicationDbContext();
+        private static AdvertisementPortalContext db = new AdvertisementPortalContext();
+        private static ApplicationDbContext appdb = new ApplicationDbContext();
 
         public ActionResult Index() {
             List<CompleteUserModel> list = new List<CompleteUserModel>();
@@ -30,6 +30,7 @@ namespace AdvertisingPortal.Controllers {
         public ActionResult Edit(string id) {
             IdentityUser user = appdb.Users.Where(s => s.Id == id).First();
             UserModel userInfo = db.Users.Where(s => s.ID == id).First();
+
 
             CompleteUserModel cuser = new CompleteUserModel { user = user, userInfo = userInfo };
             

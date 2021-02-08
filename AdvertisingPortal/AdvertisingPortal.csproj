@@ -170,6 +170,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AdvertisementModelController.cs" />
     <Compile Include="Controllers\CategoryModelController.cs" />
+    <Compile Include="Controllers\ErrorsController.cs" />
     <Compile Include="Controllers\FileModelController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -250,7 +251,6 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\UserModel\Index.cshtml" />
     <Content Include="Views\UserModel\Create.cshtml" />
-    <Content Include="Views\AdvertisementModel\Index.cshtml" />
     <Content Include="Views\CategoryModel\Create.cshtml" />
     <Content Include="Views\FavouriteModel\Index.cshtml" />
     <Content Include="Views\FileModel\Index.cshtml" />
@@ -264,6 +264,9 @@
     <Content Include="Views\AdvertisementModel\Delete.cshtml" />
     <Content Include="Views\CategoryModel\AdminView.cshtml" />
     <Content Include="Views\Home\UserDetails.cshtml" />
+    <Content Include="Views\CategoryModel\Index.cshtml" />
+    <Content Include="Views\AdvertisementModel\Details.cshtml" />
+    <Content Include="Views\Errors\AccessDanied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
