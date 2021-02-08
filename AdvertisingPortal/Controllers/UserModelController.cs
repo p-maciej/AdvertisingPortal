@@ -32,14 +32,33 @@ namespace AdvertisingPortal.Controllers {
             UserModel userInfo = db.Users.Where(s => s.ID == id).First();
 
             CompleteUserModel cuser = new CompleteUserModel { user = user, userInfo = userInfo };
+            
+            List<UserRoleViewModel> cat1 = new List<UserRoleViewModel>();
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
 
-            ViewBag.roles = new MultiSelectList(appdb.Roles, "Id", "Name", appdb.Roles.Select(c => c.Id).ToArray());
+            var usr = userManager.FindById(id);
+            var roles = appdb.Roles;
+            var userRoles = usr.Roles;
+
+            foreach (var role in roles.ToList()) {
+                var roleView = new UserRoleViewModel { RoleId = role.Id, RoleName = role.Name, IsSelected = false };
+                foreach (var userRole in userRoles) {
+                    if(userRole.RoleId == role.Id) {
+                        roleView.IsSelected = true;
+                        break;
+                    }
+                } 
+
+                cat1.Add(roleView);   
+            }
+
+            ViewBag.rolesT = cat1;
 
             return View(cuser);
         }
 
         [HttpPost]
-        public ActionResult Edit(CompleteUserModel val) {
+        public ActionResult Edit(CompleteUserModel val, string[] roleGroup) {
             if (ModelState.IsValid) {
                 IdentityUser userE = appdb.Users.First(s => s.Id == val.user.Id);
                 userE.Email = val.user.Email;
@@ -49,8 +68,36 @@ namespace AdvertisingPortal.Controllers {
                 userInfo.City = val.userInfo.City;
                 userInfo.PhoneNumber = val.userInfo.PhoneNumber;
 
-                db.SaveChanges();
+                var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
+                var roles = appdb.Roles;
+
+                // add to role
+                if (roleGroup.Length > 0) {
+                    foreach (var role in roleGroup) {
+                        var roleName = roles.First(s => s.Id == role);
+                        if (!userManager.IsInRole(userE.Id, roleName.Name)) {
+                            userManager.AddToRole(userE.Id, roleName.Name);
+                        }
+                    }
+                }
+
+                // remove from unchecked roles
+                foreach(var role in roles) {
+                    if(!roleGroup.Contains(role.Id)) {
+                        try {
+                            if (userManager.IsInRole(userE.Id, role.Name)) {
+                                System.Diagnostics.Debug.WriteLine(role.Name);
+                                userE.Roles.Remove(userE.Roles.First(r => r.RoleId == role.Id));
+                            }
+                        } catch(Exception e) {
+                            System.Diagnostics.Debug.WriteLine(e.Message);
+                        }
+                    }
+                }
+
+
                 appdb.SaveChanges();
+                db.SaveChanges();
 
                 return RedirectToAction("Index");
             }
