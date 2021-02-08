@@ -17,6 +17,12 @@ namespace AdvertisingPortal.Controllers
             return View(categories.ToList());
         }
 
+        public ActionResult AdminView() {
+            DbSet<CategoryModel> categories = db.Categories;
+            return View(categories.ToList());
+        }
+
+        [Authorize(Roles = "admin")]
         public ActionResult Create() {
             List<SelectListItem> cat = new List<SelectListItem>();
 
@@ -29,6 +35,7 @@ namespace AdvertisingPortal.Controllers
             return View();
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Create([Bind(Include = "Name, Parent")] CategoryModel category) {
             if (ModelState.IsValid) {
@@ -40,6 +47,7 @@ namespace AdvertisingPortal.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(int id) {
             CategoryModel cat = db.Categories.Where(s => s.ID == id).FirstOrDefault();
 
@@ -54,6 +62,7 @@ namespace AdvertisingPortal.Controllers
             return View(cat);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Edit(CategoryModel category) {
             if (ModelState.IsValid) {
@@ -65,6 +74,7 @@ namespace AdvertisingPortal.Controllers
             return View(category);       
         }
 
+        [Authorize(Roles = "admin")]
         public ActionResult Delete(int? id) {
             if (id == 0) {
                 ViewBag.Message = String.Format("Category don't exist.");
@@ -79,6 +89,7 @@ namespace AdvertisingPortal.Controllers
             return View(category);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id) {

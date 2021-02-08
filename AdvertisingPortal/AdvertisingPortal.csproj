@@ -263,6 +263,7 @@
     <Content Include="Views\AdvertisementModel\Create.cshtml" />
     <Content Include="Views\AdvertisementModel\Edit.cshtml" />
     <Content Include="Views\AdvertisementModel\Delete.cshtml" />
+    <Content Include="Views\CategoryModel\AdminView.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

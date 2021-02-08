@@ -15,5 +15,10 @@ namespace AdvertisingPortal.Controllers {
 
             return View();
         }
+
+        [Authorize(Roles = "admin")]
+        public ActionResult AdminPanel() {
+            return View();
+        }
     }
 }

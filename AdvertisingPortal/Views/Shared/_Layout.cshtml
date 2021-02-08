@@ -26,13 +26,21 @@
                     <li>@Html.ActionLink("Kategorie", "Index", "CategoryModel")</li>
                     <!--<li>@Html.ActionLink("Ulubione", "Index", "FavouriteModel")</li>
                     <li>@Html.ActionLink("Pliki", "Index", "FileModel")</li>-->
-                    <li>@if (@User.IsInRole("admin")) { @Html.ActionLink("Panel administracyjny", "Index", "AdminPanel") }</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
-        </div>
+            @if (@User.IsInRole("admin")) {
+                <div class="navbar-collapse collapse">
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Panel administracyjny", "Index", "Home")</li>
+                        <li>@Html.ActionLink("Kategorie", "AdminView", "CategoryModel")</li>
+                        <li>@Html.ActionLink("Użytkownicy", "Index", "UserModel")</li>
+                    </ul>
+                </div>
+            }
+            </div>
     </div>
-    <div class="container body-content">
+    <div class="container body-content" @if (@User.IsInRole("admin")) { @Html.Raw("style='margin-top: 80px;'") }>
         @RenderBody()
         <hr />
         <footer>
