@@ -16,6 +16,7 @@ namespace AdvertisingPortal.Controllers
         private AdvertisementPortalContext db = new AdvertisementPortalContext();
         private static ApplicationDbContext appdb = new ApplicationDbContext();
         private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
+        private static Random random = new Random();
 
         [Authorize]
         public ActionResult Create() {
@@ -26,32 +27,36 @@ namespace AdvertisingPortal.Controllers
 
         [Authorize]
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Create(AdvertisementModel ad) {
-            TryUpdateModel(ad);
-            ModelState.Remove("Category.ID");
-            ModelState.Remove("Category.Name");
+        public ActionResult Create(AdvertisementCreate advertisement) {
+            TryUpdateModel(advertisement);
+            ModelState.Remove("ad.Category.ID");
+            ModelState.Remove("ad.Category.Name");
             if (ModelState.IsValid) {
-                CategoryModel cat = db.Categories.Where(i => i.ID == ad.Category.ID).Single();
+                CategoryModel cat = db.Categories.Where(i => i.ID == advertisement.Ad.Category.ID).Single();
 
                 IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
                 UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
 
-                ad.Category = cat;
+                advertisement.Ad.Category = cat;
 
-                ad.AddTime = DateTime.Now;
-                ad.Active = true;
-                ad.User = userInfo;
-
-                //string _FileName = Path.GetFileName(ad.file.FileName);
-                //string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
-                //ad.file.SaveAs(_path);
-
-                db.Advertisements.Add(ad);
+                advertisement.Ad.AddTime = DateTime.Now;
+                advertisement.Ad.Active = true;
+                advertisement.Ad.User = userInfo;
+                
+                string _FileName = Path.GetFileName(advertisement.AttachImage.FileName);
+                string dirName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + RandomString(8) + Path.GetExtension(_FileName);
+                string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), dirName);
+                advertisement.AttachImage.SaveAs(_path);
+                
+                db.Advertisements.Add(advertisement.Ad);
+                db.Files.Add(advertisement.Ad.Files);
                 db.SaveChanges();
+                advertisement.Ad.Files = new FileModel { Path = dirName, AddTime = DateTime.Now};
+
                 return RedirectToAction("UserDetails", "Home");
             }
             ViewBag.categories = db.Categories.ToList();
-            return View(ad);
+            return View(advertisement);
         }
 
         [Authorize]
@@ -169,6 +174,12 @@ namespace AdvertisingPortal.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        public static string RandomString(int length) {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }

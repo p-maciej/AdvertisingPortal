@@ -25,16 +25,14 @@ namespace AdvertisingPortal.Models {
         public bool Active { get; set; }
 
         public virtual UserModel User { get; set; }
-        public virtual ICollection<FileModel> Files { get; set; }
+        public virtual FileModel Files { get; set; }
         public virtual CategoryModel Category { get; set; }
         public virtual ICollection<FavouriteModel> Favourites { get; set; }
     }
 
     public class AdvertisementCreate {
-        public AdvertisementModel advertisement { get; set; }
-        //[Required]
-        //public CategoryModel category { get; set; }
+        public AdvertisementModel Ad { get; set; }
         [Required]
-        public HttpPostedFile file { get; set; }
+        public HttpPostedFileBase AttachImage { get; set; }
     }
 }

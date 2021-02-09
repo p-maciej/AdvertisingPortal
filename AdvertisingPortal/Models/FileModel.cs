@@ -14,7 +14,5 @@ namespace AdvertisingPortal.Models {
         public string Path { get; set; }
         [Required]
         public DateTime AddTime { get; set; }
-
-        public virtual AdvertisementModel Advertisement { get; set; }
     }
 }
