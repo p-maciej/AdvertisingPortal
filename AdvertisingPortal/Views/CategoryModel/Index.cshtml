@@ -18,6 +18,9 @@
     <table class="table">
         <tr>
             <th>
+                Miniatura
+            </th>
+            <th>
                 Ogłoszenie
             </th>
             <th>
@@ -26,17 +29,20 @@
         </tr>
 
         @foreach (var item in Model.advertisements) {
-            <tr>
-                <td>
-                    @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                    @if (item.ToNegotiate == true) {
-                        @Html.Raw(" do negocjacji");
-                    }
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <img src="~/UploadedFiles/@item.Files.Path" height="50" />
+            </td>
+            <td>
+                @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+                @if (item.ToNegotiate == true) {
+                    @Html.Raw(" do negocjacji");
+                }
+            </td>
+        </tr>
         }
 
     </table>

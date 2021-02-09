@@ -2,6 +2,7 @@
 using AdvertisingPortal.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Data.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace AdvertisingPortal.Controllers {
         private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
 
         public ActionResult Index() {
-            var advertisements = db.Advertisements.Where(a => a.Active == true).OrderByDescending(b => b.AddTime).Take(30);
+            var advertisements = db.Advertisements.Where(a => a.Active == true).Include(a => a.Files).OrderByDescending(b => b.AddTime).Take(30);
 
             if(advertisements.Count() > 0) {
                 ViewBag.display = true;
@@ -35,7 +36,7 @@ namespace AdvertisingPortal.Controllers {
         public ActionResult UserDetails() {
             IQueryable<AdvertisementModel> advertisements;
             IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
-            advertisements = db.Advertisements.Where(a => a.User.ID == user.Id);
+            advertisements = db.Advertisements.Where(a => a.User.ID == user.Id).Include(a => a.Files);
 
             return View(advertisements.ToList());
         }

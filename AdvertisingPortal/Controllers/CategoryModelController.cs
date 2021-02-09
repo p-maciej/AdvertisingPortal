@@ -21,7 +21,7 @@ namespace AdvertisingPortal.Controllers
                 categories = db.Categories.Where(c => c.Parent == null);
             }
 
-            var advertisements = db.Advertisements.Where(a => a.Active == true && a.Category.ID == id).OrderByDescending(b => b.AddTime);
+            var advertisements = db.Advertisements.Where(a => a.Active == true && a.Category.ID == id).Include(a => a.Files).OrderByDescending(b => b.AddTime);
 
             if (advertisements.Count() > 0) {
                 ViewBag.display = true;

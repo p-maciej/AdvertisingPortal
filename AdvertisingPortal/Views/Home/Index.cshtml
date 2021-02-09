@@ -17,6 +17,7 @@
     </h2>
     <table class="table">
         <tr>
+            <th>Miniatura</th>
             <th>
                 Ogłoszenie
             </th>
@@ -27,6 +28,9 @@
 
         @foreach (var item in Model) {
             <tr>
+                <td>
+                    <img src="~/UploadedFiles/@item.Files.Path"  height="50" />
+                </td>
                 <td>
                     @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
                 </td>
