@@ -8,10 +8,10 @@
 <h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm(new { enctype = "multipart/form-data" })) 
 {
-    @Html.AntiForgeryToken()
-    
+                @Html.AntiForgeryToken()
+
 <div class="form-horizontal">
     <h4>AdvertisementModel</h4>
     <hr />
@@ -20,8 +20,8 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownList("Category_ID", new SelectList(ViewBag.categories, "Value", "Text"), "Select category", htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.Category.ID, new SelectList(ViewBag.categories, "ID", "Name"), "Wybierz kategorię", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Category.ID, "", new { @class = "text-danger" })
         </div>
     </div>
 
@@ -55,6 +55,14 @@
             <div class="checkbox">
                 @Html.CheckBoxFor(model => model.ToNegotiate)
                 @Html.ValidationMessageFor(model => model.ToNegotiate, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.Label("Obraz", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            <div class="checkbox">
+                @Html.TextBox("picture", "", new { type = "file" })
             </div>
         </div>
     </div>

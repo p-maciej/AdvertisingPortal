@@ -5,6 +5,7 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,39 +19,42 @@ namespace AdvertisingPortal.Controllers
 
         [Authorize]
         public ActionResult Create() {
-            List<SelectListItem> cat1 = new List<SelectListItem>();
-
-            foreach (CategoryModel item in db.Categories.ToList()) {
-                cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString()});
-            }
-
-            ViewBag.categories = cat1;
+            ViewBag.categories = db.Categories.ToList();
 
             return View();
         }
 
         [Authorize]
         [HttpPost, ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Title, Content, Price, ToNegotiate")] AdvertisementModel advertisement, int Category_ID) {
+        public ActionResult Create(AdvertisementModel ad) {
+            TryUpdateModel(ad);
+            ModelState.Remove("Category.ID");
+            ModelState.Remove("Category.Name");
             if (ModelState.IsValid) {
-                CategoryModel cat = db.Categories.Where(i => i.ID == Category_ID).Single();
+                CategoryModel cat = db.Categories.Where(i => i.ID == ad.Category.ID).Single();
 
                 IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
                 UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
 
-                advertisement.Category = cat;
+                ad.Category = cat;
 
-                advertisement.AddTime = DateTime.Now;
-                advertisement.Active = true;
-                advertisement.User = userInfo;
+                ad.AddTime = DateTime.Now;
+                ad.Active = true;
+                ad.User = userInfo;
 
-                db.Advertisements.Add(advertisement);
+                //string _FileName = Path.GetFileName(ad.file.FileName);
+                //string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), _FileName);
+                //ad.file.SaveAs(_path);
+
+                db.Advertisements.Add(ad);
                 db.SaveChanges();
                 return RedirectToAction("UserDetails", "Home");
             }
-            return View(advertisement);
+            ViewBag.categories = db.Categories.ToList();
+            return View(ad);
         }
 
+        [Authorize]
         public ActionResult Edit(int id) {
             AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).FirstOrDefault();
 
@@ -77,22 +81,38 @@ namespace AdvertisingPortal.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(AdvertisementModel advertisement, int Category_ID) {
+        public ActionResult Edit(AdvertisementModel advertisement) {
+            TryUpdateModel(advertisement);
+            ModelState.Remove("Category.ID");
+            ModelState.Remove("Category.Name");
             if (ModelState.IsValid) {
-                AdvertisementModel ad = db.Advertisements.First(x => x.ID == advertisement.ID);
+                AdvertisementModel ad = db.Advertisements.Find(advertisement.ID);
 
-                CategoryModel cat = db.Categories.First(i => i.ID == Category_ID);
-                advertisement.Category = cat;
+                CategoryModel cat = db.Categories.First(i => i.ID == advertisement.Category.ID);
 
-                advertisement.AddTime = ad.AddTime;
-                db.Entry(advertisement).State = EntityState.Modified;
+                ad.Price = advertisement.Price;
+                ad.Title = advertisement.Title;
+                ad.Content = advertisement.Content;
+                ad.ToNegotiate = advertisement.ToNegotiate;
+
+                ad.Category = cat;
+
+
+                ad.AddTime = ad.AddTime;
+                db.Entry(ad).State = EntityState.Modified;
                 db.SaveChanges();
 
                 return RedirectToAction("UserDetails", "Home");
             }
+
+            List<SelectListItem> cat1 = new List<SelectListItem>();
+            foreach (CategoryModel item in db.Categories.ToList())
+                cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString(), Selected = (advertisement.Category != null && advertisement.Category.ID == item.ID ? true : false) });
+            ViewBag.categories = cat1;
             return View(advertisement);
         }
 
+        [Authorize]
         public ActionResult Delete(int? id) {
             if (id == 0) {
                 ViewBag.Message = String.Format("Advertisement doesn't exist.");
@@ -107,6 +127,7 @@ namespace AdvertisingPortal.Controllers
             return View(advertisement);
         }
 
+        [Authorize]
         [ActionName("Deactivate")]
         public ActionResult Deactivate(int id) {
             AdvertisementModel advertisement = db.Advertisements.Find(id);
@@ -119,6 +140,7 @@ namespace AdvertisingPortal.Controllers
             return RedirectToAction("UserDetails", "Home");
         }
 
+        [Authorize]
         [ActionName("Activate")]
         public ActionResult Activate(int id) {
             AdvertisementModel advertisement = db.Advertisements.Find(id);
@@ -131,6 +153,7 @@ namespace AdvertisingPortal.Controllers
             return RedirectToAction("UserDetails", "Home");
         }
 
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id) {

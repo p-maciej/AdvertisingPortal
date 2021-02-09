@@ -45,11 +45,14 @@
         </td>
         <td>
             @Html.ActionLink("Edytuj", "Edit", new { id = item.ID, controller = "AdvertisementModel" }) |
+            @Html.ActionLink("Usuń", "Delete", new { id = item.ID, controller = "AdvertisementModel" }) |
             @if (item.Active == true) {
                 @Html.ActionLink("Zakończ", "Deactivate", new { id = item.ID, controller = "AdvertisementModel" })
-            } else {
+            }
+            else {
                 @Html.ActionLink("Wznów", "Activate", new { id = item.ID, controller = "AdvertisementModel" })
             }
+
         </td>
     </tr>
     }

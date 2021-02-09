@@ -29,4 +29,12 @@ namespace AdvertisingPortal.Models {
         public virtual CategoryModel Category { get; set; }
         public virtual ICollection<FavouriteModel> Favourites { get; set; }
     }
+
+    public class AdvertisementCreate {
+        public AdvertisementModel advertisement { get; set; }
+        //[Required]
+        //public CategoryModel category { get; set; }
+        [Required]
+        public HttpPostedFile file { get; set; }
+    }
 }
