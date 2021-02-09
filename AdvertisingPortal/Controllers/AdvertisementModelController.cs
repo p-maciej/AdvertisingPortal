@@ -29,8 +29,8 @@ namespace AdvertisingPortal.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public ActionResult Create(AdvertisementCreate advertisement) {
             TryUpdateModel(advertisement);
-            ModelState.Remove("ad.Category.ID");
-            ModelState.Remove("ad.Category.Name");
+            ModelState.Remove("Ad.Category.ID");
+            ModelState.Remove("Ad.Category.Name");
             if (ModelState.IsValid) {
                 CategoryModel cat = db.Categories.Where(i => i.ID == advertisement.Ad.Category.ID).Single();
 
@@ -47,11 +47,12 @@ namespace AdvertisingPortal.Controllers
                 string dirName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + RandomString(8) + Path.GetExtension(_FileName);
                 string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), dirName);
                 advertisement.AttachImage.SaveAs(_path);
-                
+
+                advertisement.Ad.Files = new FileModel { Path = dirName, AddTime = DateTime.Now };
                 db.Advertisements.Add(advertisement.Ad);
                 db.Files.Add(advertisement.Ad.Files);
                 db.SaveChanges();
-                advertisement.Ad.Files = new FileModel { Path = dirName, AddTime = DateTime.Now};
+                
 
                 return RedirectToAction("UserDetails", "Home");
             }
@@ -61,6 +62,7 @@ namespace AdvertisingPortal.Controllers
 
         [Authorize]
         public ActionResult Edit(int id) {
+            AdvertisementCreate advertisement = new AdvertisementCreate();
             AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).FirstOrDefault();
 
             IdentityUser user = appdb.Users.Where(s => s.UserName == User.Identity.Name).First();
@@ -72,7 +74,9 @@ namespace AdvertisingPortal.Controllers
                     cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString(), Selected = (ad.Category != null && ad.Category.ID == item.ID ? true : false) });
                 }
                 ViewBag.categories = cat1;
-                return View(ad);
+
+                advertisement.Ad = ad;
+                return View(advertisement);
             } else {
                 return RedirectToAction("AccessDanied", "Errors");
             }
@@ -86,23 +90,44 @@ namespace AdvertisingPortal.Controllers
         }
 
         [HttpPost]
-        public ActionResult Edit(AdvertisementModel advertisement) {
+        public ActionResult Edit(AdvertisementCreate advertisement) {
             TryUpdateModel(advertisement);
-            ModelState.Remove("Category.ID");
-            ModelState.Remove("Category.Name");
+            ModelState.Remove("Ad.Category.ID");
+            ModelState.Remove("Ad.Category.Name");
+            ModelState.Remove("AttachImage");
             if (ModelState.IsValid) {
-                AdvertisementModel ad = db.Advertisements.Find(advertisement.ID);
+                AdvertisementModel ad = db.Advertisements.Find(advertisement.Ad.ID);
 
-                CategoryModel cat = db.Categories.First(i => i.ID == advertisement.Category.ID);
+                CategoryModel cat = db.Categories.First(i => i.ID == advertisement.Ad.Category.ID);
 
-                ad.Price = advertisement.Price;
-                ad.Title = advertisement.Title;
-                ad.Content = advertisement.Content;
-                ad.ToNegotiate = advertisement.ToNegotiate;
+                ad.Price = advertisement.Ad.Price;
+                ad.Title = advertisement.Ad.Title;
+                ad.Content = advertisement.Ad.Content;
+                ad.ToNegotiate = advertisement.Ad.ToNegotiate;
 
                 ad.Category = cat;
 
 
+                if (advertisement.AttachImage != null) {
+                    FileModel file = db.Files.First(i => i.ID == ad.Files.ID);
+                    string strPhysicalFolder = Server.MapPath("~/UploadedFiles/");
+
+                    string strFileFullPath = strPhysicalFolder + file.Path;
+                    if (System.IO.File.Exists(strFileFullPath)) {
+                        System.IO.File.Delete(strFileFullPath);
+                    }
+
+                    string _FileName = Path.GetFileName(advertisement.AttachImage.FileName);
+                    string dirName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + RandomString(8) + Path.GetExtension(_FileName);
+                    string _path = Path.Combine(Server.MapPath("~/UploadedFiles"), dirName);
+                    advertisement.AttachImage.SaveAs(_path);
+
+                    advertisement.Ad.Files = new FileModel { Path = dirName, AddTime = DateTime.Now };
+                    ad.Files = advertisement.Ad.Files;
+                    db.Files.Remove(file);
+                    db.Files.Add(advertisement.Ad.Files);
+                }
+                
                 ad.AddTime = ad.AddTime;
                 db.Entry(ad).State = EntityState.Modified;
                 db.SaveChanges();
@@ -112,7 +137,7 @@ namespace AdvertisingPortal.Controllers
 
             List<SelectListItem> cat1 = new List<SelectListItem>();
             foreach (CategoryModel item in db.Categories.ToList())
-                cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString(), Selected = (advertisement.Category != null && advertisement.Category.ID == item.ID ? true : false) });
+                cat1.Add(new SelectListItem() { Text = item.Name, Value = item.ID.ToString(), Selected = (advertisement.Ad.Category != null && advertisement.Ad.Category.ID == item.ID ? true : false) });
             ViewBag.categories = cat1;
             return View(advertisement);
         }

@@ -1,4 +1,4 @@
-﻿@model AdvertisingPortal.Models.AdvertisementModel
+﻿@model AdvertisingPortal.Models.AdvertisementCreate
 
 @{
     ViewBag.Title = "Edit";
@@ -8,7 +8,7 @@
 <h2>Edit</h2>
 
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Edit", "AdvertisementModel", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -16,48 +16,58 @@
     <h4>AdvertisementModel</h4>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-    @Html.HiddenFor(model => model.ID)
+    @Html.HiddenFor(model => model.Ad.ID)
 
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Ad.Category, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.DropDownListFor(model => model.Category.ID, (IEnumerable<SelectListItem>)ViewBag.categories, "Select category", htmlAttributes: new { @class = "form-control" })
-            @Html.ValidationMessageFor(model => model.Category.ID, "", new { @class = "text-danger" })
+            @Html.DropDownListFor(model => model.Ad.Category.ID, (IEnumerable<SelectListItem>)ViewBag.categories, "Select category", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Ad.Category.ID, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Ad.Title, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Ad.Title, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Ad.Title, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Content, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Ad.Content, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.TextAreaFor(model => model.Content, new { htmlAttributes = new { @class = "md-textarea form-control" } })
-            @Html.ValidationMessageFor(model => model.Content, "", new { @class = "text-danger" })
+            @Html.TextAreaFor(model => model.Ad.Content, new { htmlAttributes = new { @class = "md-textarea form-control" } })
+            @Html.ValidationMessageFor(model => model.Ad.Content, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Ad.Price, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
-            @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Ad.Price, new { htmlAttributes = new { @class = "form-control", @type = "number", @min = "0", @step = "0.01", @value = "0" } })
+            @Html.ValidationMessageFor(model => model.Ad.Price, "", new { @class = "text-danger" })
         </div>
     </div>
 
     <div class="form-group">
-        @Html.LabelFor(model => model.ToNegotiate, htmlAttributes: new { @class = "control-label col-md-2" })
+        @Html.LabelFor(model => model.Ad.ToNegotiate, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
             <div class="checkbox">
-                @Html.CheckBoxFor(model => model.ToNegotiate)
-                @Html.ValidationMessageFor(model => model.ToNegotiate, "", new { @class = "text-danger" })
+                @Html.CheckBoxFor(model => model.Ad.ToNegotiate)
+                @Html.ValidationMessageFor(model => model.Ad.ToNegotiate, "", new { @class = "text-danger" })
             </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        @Html.Label("Obraz", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @{ Html.EnableClientValidation(false); }
+            @Html.TextBoxFor(model => model.AttachImage, "", new { type = "file" })
+            @Html.ValidationMessageFor(model => model.AttachImage, "", new { @class = "text-danger" })
+            @{ Html.EnableClientValidation(true); }
         </div>
     </div>
 
