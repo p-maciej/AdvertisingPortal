@@ -75,12 +75,16 @@
             }
         </dd>
         <dt>
-            
+
 
         </dt>
         <dd>
-            <img src="~/UploadedFiles/@Html.DisplayFor(model => model.Files.Path)" height="400"/>
+            <img src="~/UploadedFiles/@Html.DisplayFor(model => model.Files.Path)" height="400" />
         </dd>
+
+        @if (ViewBag.showAdminitiveTools == true) {
+            @Html.ActionLink("Usuń", "Delete", new { id = Model.ID })
+        }
 
     </dl>
 </div>

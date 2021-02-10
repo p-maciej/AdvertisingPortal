@@ -88,7 +88,7 @@ namespace AdvertisingPortal.Controllers
 
             IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
             int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == user.Id).Count();
-
+            ViewBag.showAdminitiveTools = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator");
             ViewBag.AddedToFavourites = check > 0;
             return View(ad);
         }
@@ -153,38 +153,59 @@ namespace AdvertisingPortal.Controllers
                 return View(new AdvertisementModel());
             }
 
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+            UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
+
             AdvertisementModel advertisement = db.Advertisements.Find(id);
 
             if (advertisement == null) {
                 return HttpNotFound();
             }
-            return View(advertisement);
+
+            if (advertisement.User.ID == userInfo.ID || userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator"))
+                return View(advertisement);
+            else
+                return RedirectToAction("AccessDanied", "Errors");
         }
 
         [Authorize]
         [ActionName("Deactivate")]
         public ActionResult Deactivate(int id) {
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+            UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
+
             AdvertisementModel advertisement = db.Advertisements.Find(id);
 
-            advertisement.CloseTime = DateTime.Now;
-            advertisement.Active = false;
+            if (advertisement.User.ID == userInfo.ID || userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator")) {
+                advertisement.CloseTime = DateTime.Now;
+                advertisement.Active = false;
 
-            db.SaveChanges();
-
-            return RedirectToAction("UserDetails", "Home");
+                db.SaveChanges();
+                return RedirectToAction("UserDetails", "Home");
+            }
+            else {
+                return RedirectToAction("AccessDanied", "Errors");
+            }
         }
 
         [Authorize]
         [ActionName("Activate")]
         public ActionResult Activate(int id) {
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+            UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
+
             AdvertisementModel advertisement = db.Advertisements.Find(id);
 
-            advertisement.CloseTime = null;
-            advertisement.Active = true;
+            if (advertisement.User.ID == userInfo.ID || userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator")) {
 
-            db.SaveChanges();
+                advertisement.CloseTime = null;
+                advertisement.Active = true;
 
-            return RedirectToAction("UserDetails", "Home");
+                db.SaveChanges();
+                return RedirectToAction("UserDetails", "Home");
+            } else {
+                return RedirectToAction("AccessDanied", "Errors");
+            }      
         }
 
         [Authorize]
