@@ -267,6 +267,7 @@
     <Content Include="Views\CategoryModel\Index.cshtml" />
     <Content Include="Views\AdvertisementModel\Details.cshtml" />
     <Content Include="Views\Errors\AccessDanied.cshtml" />
+    <Content Include="Views\UserModel\AccountSettings.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 using AdvertisingPortal.DAL;
 using AdvertisingPortal.Models;
 using Microsoft.AspNet.Identity;
@@ -65,6 +66,7 @@ namespace AdvertisingPortal.Controllers {
             if (ModelState.IsValid) {
                 IdentityUser userE = appdb.Users.First(s => s.Id == val.user.Id);
                 userE.Email = val.user.Email;
+                userE.UserName = val.user.Email;
                 UserModel userInfo = db.Users.First(s => s.ID == val.user.Id);
                 userInfo.FirstName = val.userInfo.FirstName;
                 userInfo.LastName = val.userInfo.LastName;
@@ -177,6 +179,43 @@ namespace AdvertisingPortal.Controllers {
             ViewBag.roles = cat1;
 
             return View(cuser);
+        }
+
+        [Authorize]
+        public ActionResult AccountSettings() {
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+            UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
+
+            CompleteUserModel cuser = new CompleteUserModel { user = user, userInfo = userInfo };
+
+            return View(cuser);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult AccountSettings(CompleteUserModel val) {
+            if (ModelState.IsValid) {
+                IdentityUser userE = appdb.Users.First(s => s.Id == val.user.Id);
+                bool logout = userE.UserName != val.user.Email;
+                userE.Email = val.user.Email;
+                userE.UserName = val.user.Email;
+                UserModel userInfo = db.Users.First(s => s.ID == val.user.Id);
+                userInfo.FirstName = val.userInfo.FirstName;
+                userInfo.LastName = val.userInfo.LastName;
+                userInfo.City = val.userInfo.City;
+                userInfo.PhoneNumber = val.userInfo.PhoneNumber;
+
+                appdb.SaveChanges();
+                db.SaveChanges();
+
+                if (logout) {
+                    FormsAuthentication.SignOut();
+                    Session.Abandon();
+                }
+
+                return RedirectToAction("Index", "Home");
+            }
+            return View(val);
         }
 
         public ActionResult AddToFavourite(int id) {
