@@ -41,6 +41,8 @@ namespace AdvertisingPortal.Controllers {
             package.Ads = advertisements.ToList();
             package.Favs = favourites.ToList();
 
+            ViewBag.favouritesShow = db.Favourites.Where(a => a.User.ID == user.Id).Count() > 0;
+            ViewBag.advertisementsShow = db.Advertisements.Where(a => a.User.ID == user.Id).Count() > 0;
             return View(package);
         }
     }

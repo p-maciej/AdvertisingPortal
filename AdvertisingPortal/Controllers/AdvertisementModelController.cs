@@ -192,17 +192,35 @@ namespace AdvertisingPortal.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id) {
             if (ModelState.IsValid) {
+                IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+                UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
+
                 AdvertisementModel advertisement = db.Advertisements.Find(id);
-                try {
-                    db.Advertisements.Remove(advertisement);
-                    db.SaveChanges();
-                }
-                catch {
-                    ViewBag.Message = String.Format("Cannot delete this advertisement.");
-                    return View(advertisement);
+
+                if (advertisement.User.ID == userInfo.ID || userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator")) {
+                    try {
+                        
+                        string strPhysicalFolder = Server.MapPath("~/UploadedFiles/");
+
+                        string strFileFullPath = strPhysicalFolder + advertisement.Files.Path;
+                        if (System.IO.File.Exists(strFileFullPath)) {
+                            System.IO.File.Delete(strFileFullPath);
+                        }
+
+                        db.Files.Remove(advertisement.Files);
+
+                        db.Advertisements.Remove(advertisement);
+                        db.SaveChanges();
+                    }
+                    catch {
+                        ViewBag.Message = String.Format("Cannot delete this advertisement.");
+                        return View(advertisement);
+                    }
+                } else {
+                    return RedirectToAction("AccessDanied", "Errors");
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
         }
 
         public static string RandomString(int length) {

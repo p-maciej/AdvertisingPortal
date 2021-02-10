@@ -5,68 +5,74 @@
 }
 
 <h2>Panel użytkownika</h2>
-<h3>Twoje ogłoszenia</h3>
 <p align="right"><a href="/Manage/Index">Ustawienia</a></p>
-<table class="table">
-    <tr>
-        <th>
-            Minitura
-        </th>
-        <th>
-            Ogłoszenie
-        </th>
+<h3>Twoje ogłoszenia</h3>
 
-        <th>
-            Cena
-        </th>
-        <th>Data dodania</th>
-        <th>Aktywne</th>
-        <th></th>
-    </tr>
+@if (ViewBag.advertisementsShow == true) {
+    <table class="table">
+        <tr>
+            <th>
+                Minitura
+            </th>
+            <th>
+                Ogłoszenie
+            </th>
 
-    @foreach (var item in Model.Ads) {
-    <tr>
-        <td>
-            <a href="/AdvertisementModel/Details/@item.ID"><img src="~/UploadedFiles/@item.Files.Path" height="50" /></a>
-        </td>
-        <td>
-            @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-            @if (item.ToNegotiate == true) {
-                @Html.Raw(" do negocjacji");
-            }
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.AddTime)
-        </td>
-        <td>
-            @if (item.Active == true) {
-                @Html.Raw("Tak")
-            }
-            else {
-                @Html.Raw("Nie")
-            }
-        </td>
-        <td>
-            @Html.ActionLink("Edytuj", "Edit", new { id = item.ID, controller = "AdvertisementModel" }) |
-            @Html.ActionLink("Usuń", "Delete", new { id = item.ID, controller = "AdvertisementModel" }) |
-            @if (item.Active == true) {
-                @Html.ActionLink("Zakończ", "Deactivate", new { id = item.ID, controller = "AdvertisementModel" })
-            }
-            else {
-                @Html.ActionLink("Wznów", "Activate", new { id = item.ID, controller = "AdvertisementModel" })
-            }
+            <th>
+                Cena
+            </th>
+            <th>Data dodania</th>
+            <th>Aktywne</th>
+            <th></th>
+        </tr>
 
-        </td>
-    </tr>
-    }
-</table>
+        @foreach (var item in Model.Ads) {
+            <tr>
+                <td>
+                    <a href="/AdvertisementModel/Details/@item.ID"><img src="~/UploadedFiles/@item.Files.Path" height="50" /></a>
+                </td>
+                <td>
+                    @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                    @if (item.ToNegotiate == true) {
+                        @Html.Raw(" do negocjacji");
+                    }
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddTime)
+                </td>
+                <td>
+                    @if (item.Active == true) {
+                        @Html.Raw("Tak")
+                    }
+                    else {
+                        @Html.Raw("Nie")
+                    }
+                </td>
+                <td>
+                    @Html.ActionLink("Edytuj", "Edit", new { id = item.ID, controller = "AdvertisementModel" }) |
+                    @Html.ActionLink("Usuń", "Delete", new { id = item.ID, controller = "AdvertisementModel" }) |
+                    @if (item.Active == true) {
+                        @Html.ActionLink("Zakończ", "Deactivate", new { id = item.ID, controller = "AdvertisementModel" })
+                    }
+                    else {
+                        @Html.ActionLink("Wznów", "Activate", new { id = item.ID, controller = "AdvertisementModel" })
+                    }
 
+                </td>
+            </tr>
+        }
+    </table>
+}
+else {
+    <h4>Brak ogłoszeń</h4>
+}
 <br />
 <br />
 <h3>Ulubione</h3>
+@if (ViewBag.favouritesShow == true) {
 <table class="table">
     <tr>
         <th>
@@ -103,3 +109,7 @@
         </tr>
     }
 </table>
+}
+else {
+    <h4>Brak ulubionych</h4>
+}

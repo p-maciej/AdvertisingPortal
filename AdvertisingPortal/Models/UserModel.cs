@@ -23,6 +23,7 @@ namespace AdvertisingPortal.Models {
         public int PhoneNumber { get; set; }
         [DisplayName("City")]
         public string City { get; set; }
+        public bool isDeleted { get; set; }
 
         public virtual ICollection<AdvertisementModel> Advertisements { get; set; }
         public virtual ICollection<FavouriteModel> Favourites { get; set; }
