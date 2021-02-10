@@ -84,7 +84,7 @@ namespace AdvertisingPortal.Controllers
         }
 
         public ActionResult Details(int id) {
-            AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).Include(a => a.Files).FirstOrDefault();
+            AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).Include(a => a.Files).Include(u => u.User).FirstOrDefault();
 
             return View(ad);
         }
