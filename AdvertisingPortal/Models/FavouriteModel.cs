@@ -12,7 +12,5 @@ namespace AdvertisingPortal.Models {
         public int ID { get; set; }
         public virtual AdvertisementModel Advertisement { get; set; }
         public virtual UserModel User { get; set; }
-
-        // widoki, kontrolery dodawania usuwania, 
     }
 }

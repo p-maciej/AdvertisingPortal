@@ -32,11 +32,16 @@ namespace AdvertisingPortal.Controllers {
 
         [Authorize]
         public ActionResult UserDetails() {
+            AdvertisementsFavourites package = new AdvertisementsFavourites();
+
             IQueryable<AdvertisementModel> advertisements;
             IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
             advertisements = db.Advertisements.Where(a => a.User.ID == user.Id).Include(a => a.Files);
+            IQueryable<FavouriteModel> favourites = db.Favourites.Where(a => a.User.ID == user.Id).Include(u => u.Advertisement);
+            package.Ads = advertisements.ToList();
+            package.Favs = favourites.ToList();
 
-            return View(advertisements.ToList());
+            return View(package);
         }
     }
 }

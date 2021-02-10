@@ -158,5 +158,38 @@ namespace AdvertisingPortal.Controllers {
 
             return View(cuser);
         }
+
+        public ActionResult AddToFavourite(int id) {
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+            UserModel userInfo = db.Users.Where(s => s.ID == user.Id).First();
+
+            int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == userInfo.ID).Count();
+
+            if (check == 0) {
+                AdvertisementModel advertisement = db.Advertisements.First(s => s.ID == id);
+                db.Favourites.Add(new FavouriteModel { User = userInfo, Advertisement = advertisement });
+                db.SaveChanges();
+            }
+
+            return RedirectToAction("Details/" + id.ToString(), "AdvertisementModel");
+        }
+
+        public ActionResult RemoveFromFavourites(int id, int redirect) {
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+
+            int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == user.Id).Count();
+
+            if (check > 0) {
+                FavouriteModel favourite = db.Favourites.First(f => f.Advertisement.ID == id && f.User.ID == user.Id);
+                db.Favourites.Remove(favourite);
+                db.SaveChanges();
+            }
+
+            if (redirect == 0) {
+                return RedirectToAction("UserDetails", "Home");
+            } else {
+                return RedirectToAction("Details/" + id.ToString(), "AdvertisementModel");
+            }    
+        }
     }
 }

@@ -86,6 +86,10 @@ namespace AdvertisingPortal.Controllers
         public ActionResult Details(int id) {
             AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).Include(a => a.Files).Include(u => u.User).FirstOrDefault();
 
+            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+            int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == user.Id).Count();
+
+            ViewBag.AddedToFavourites = check > 0;
             return View(ad);
         }
 

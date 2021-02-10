@@ -1,11 +1,11 @@
-﻿@model IEnumerable<AdvertisingPortal.Models.AdvertisementModel>
+﻿@model AdvertisingPortal.Models.AdvertisementsFavourites
 @{
     ViewBag.Title = "UserDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Panel użytkownika</h2>
-
+<h3>Twoje ogłoszenia</h3>
 <p align="right"><a href="/Manage/Index">Ustawienia</a></p>
 <table class="table">
     <tr>
@@ -24,10 +24,10 @@
         <th></th>
     </tr>
 
-    @foreach (var item in Model) {
+    @foreach (var item in Model.Ads) {
     <tr>
         <td>
-            <img src="~/UploadedFiles/@item.Files.Path" height="50" />
+            <a href="/AdvertisementModel/Details/@item.ID"><img src="~/UploadedFiles/@item.Files.Path" height="50" /></a>
         </td>
         <td>
             @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
@@ -64,3 +64,42 @@
     }
 </table>
 
+<br />
+<br />
+<h3>Ulubione</h3>
+<table class="table">
+    <tr>
+        <th>
+            Minitura
+        </th>
+        <th>
+            Ogłoszenie
+        </th>
+
+        <th>
+            Cena
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.Favs) {
+        <tr>
+            <td>
+                <a href="/AdvertisementModel/Details/@item.Advertisement.ID"><img src="~/UploadedFiles/@item.Advertisement.Files.Path" height="50" /></a>
+            </td>
+            <td>
+                @Html.ActionLink(item.Advertisement.Title, "Details", new { id = item.Advertisement.ID, controller = "AdvertisementModel" })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Advertisement.Price)
+                @if (item.Advertisement.ToNegotiate == true) {
+                    @Html.Raw(" do negocjacji");
+                }
+            </td>
+
+            <td>
+                @Html.ActionLink("Usuń z ulubionych", "RemoveFromFavourites", new { id = item.Advertisement.ID, redirect = 0, controller = "UserModel" })
+            </td>
+        </tr>
+    }
+</table>

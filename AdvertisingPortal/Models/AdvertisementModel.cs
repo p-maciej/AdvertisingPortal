@@ -35,4 +35,9 @@ namespace AdvertisingPortal.Models {
         [Required]
         public HttpPostedFileBase AttachImage { get; set; }
     }
+
+    public class AdvertisementsFavourites {
+        public List<AdvertisementModel> Ads { get; set; }
+        public List<FavouriteModel> Favs { get; set; }
+    }
 }

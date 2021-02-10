@@ -65,7 +65,15 @@
         <dd>
             @Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName)
         </dd>
-
+        <dt></dt>
+        <dd>
+            @if (ViewBag.AddedToFavourites == false) {
+                @Html.ActionLink("Dodaj do ulubionych", "AddToFavourite", new { id = Model.ID, controller = "UserModel" })
+            }
+            else {
+                @Html.ActionLink("Usuń z ulubionych", "RemoveFromFavourites", new { id = Model.ID, redirect = 1, controller = "UserModel" })
+            }
+        </dd>
         <dt>
             
 
