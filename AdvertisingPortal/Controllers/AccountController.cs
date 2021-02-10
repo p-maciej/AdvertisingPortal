@@ -157,7 +157,7 @@ namespace AdvertisingPortal.Controllers
                 var user = new ApplicationUser { UserName = model.registerInfo.Email, Email = model.registerInfo.Email };
                 var result = await UserManager.CreateAsync(user, model.registerInfo.Password);
 
-                UserModel userInfo = new UserModel { ID = user.Id, FirstName = model.userInfo.FirstName, LastName = model.userInfo.LastName, PhoneNumber = model.userInfo.PhoneNumber, City = model.userInfo.City, isDeleted = false };
+                UserModel userInfo = new UserModel { ID = user.Id, FirstName = model.userInfo.FirstName, LastName = model.userInfo.LastName, PhoneNumber = model.userInfo.PhoneNumber, City = model.userInfo.City };
                 db.Users.Add(userInfo);
                 db.SaveChanges();
                 ApplicationDbContext appdb = new ApplicationDbContext();

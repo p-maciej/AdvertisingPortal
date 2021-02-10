@@ -10,12 +10,12 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 
 
-namespace AdvertisingPortal.Controllers {
-    [Authorize(Roles = "admin")]    
+namespace AdvertisingPortal.Controllers {  
     public class UserModelController : Controller {
         private static AdvertisementPortalContext db = new AdvertisementPortalContext();
         private static ApplicationDbContext appdb = new ApplicationDbContext();
 
+        [Authorize(Roles = "admin")]
         public ActionResult Index() {
             List<CompleteUserModel> list = new List<CompleteUserModel>();
             var users = appdb.Users;
@@ -27,6 +27,7 @@ namespace AdvertisingPortal.Controllers {
             return View(list);
         }
 
+        [Authorize(Roles = "admin")]
         public ActionResult Edit(string id) {
             IdentityUser user = appdb.Users.Where(s => s.Id == id).First();
             UserModel userInfo = db.Users.Where(s => s.ID == id).First();
@@ -58,6 +59,7 @@ namespace AdvertisingPortal.Controllers {
             return View(cuser);
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost]
         public ActionResult Edit(CompleteUserModel val, string[] roleGroup) {
             if (ModelState.IsValid) {
@@ -105,6 +107,7 @@ namespace AdvertisingPortal.Controllers {
             return View(val);
         }
 
+        [Authorize(Roles = "admin")]
         public ActionResult ConfirmDelete(string id) {
             UserModel user = db.Users.Find(id);
             IdentityUser identity = appdb.Users.Find(id);
@@ -115,13 +118,28 @@ namespace AdvertisingPortal.Controllers {
             return View(new CompleteUserModel(identity, user));
         }
 
+        [Authorize(Roles = "admin")]
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public ActionResult Delete(string id) {
             if (ModelState.IsValid) {
                 UserModel user = db.Users.Find(id);
                 ApplicationUser identity = appdb.Users.Find(id);
                 try {
+                    var userAds = db.Advertisements.Where(u => u.User.ID == user.ID).ToList();
+
+                    foreach(var ad in userAds) {
+                        string strPhysicalFolder = Server.MapPath("~/UploadedFiles/");
+
+                        string strFileFullPath = strPhysicalFolder + ad.Files.Path;
+                        if (System.IO.File.Exists(strFileFullPath)) {
+                            System.IO.File.Delete(strFileFullPath);
+                        }
+
+                        db.Files.Remove(ad.Files);
+
+                        db.Advertisements.Remove(ad);
+                    }
+
                     db.Users.Remove(user);
                     appdb.Users.Remove(identity);
                     db.SaveChanges();
@@ -129,12 +147,14 @@ namespace AdvertisingPortal.Controllers {
                 }
                 catch {
                     ViewBag.Message = String.Format("Cannot delete this user.");
-                    return View(user);
+                    return View("ConfirmDelete", new CompleteUserModel(identity, user));
                 }
             }
-            return RedirectToAction("Index");
+            System.Diagnostics.Debug.WriteLine("delete");
+            return RedirectToAction("Index", "UserModel");
         }
 
+        [Authorize(Roles = "admin")]  
         public ActionResult Details(string id) {
             IdentityUser user = appdb.Users.Where(s => s.Id == id).First();
             UserModel userInfo = db.Users.Where(s => s.ID == id).First();

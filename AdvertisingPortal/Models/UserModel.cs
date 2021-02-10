@@ -21,9 +21,9 @@ namespace AdvertisingPortal.Models {
         public string LastName { get; set; }
         [DisplayName("Phone number")]
         public int PhoneNumber { get; set; }
+        [Required]
         [DisplayName("City")]
         public string City { get; set; }
-        public bool isDeleted { get; set; }
 
         public virtual ICollection<AdvertisementModel> Advertisements { get; set; }
         public virtual ICollection<FavouriteModel> Favourites { get; set; }
