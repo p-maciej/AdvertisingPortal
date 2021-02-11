@@ -1,11 +1,11 @@
 ﻿@model AdvertisingPortal.Models.UserModel
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Tworzenie konta";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create</h2>
+
 @using (Html.BeginForm("Create", "UserModel", FormMethod.Post)) {
     @Html.AntiForgeryToken()
     <div class="form-horizontal">

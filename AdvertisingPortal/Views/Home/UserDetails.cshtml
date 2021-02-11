@@ -9,107 +9,105 @@
 <h3>Twoje ogłoszenia</h3>
 
 @if (ViewBag.advertisementsShow == true) {
-    <table class="table">
-        <tr>
-            <th>
-                Minitura
-            </th>
-            <th>
-                Ogłoszenie
-            </th>
-
-            <th>
-                Cena
-            </th>
-            <th>Data dodania</th>
-            <th>Aktywne</th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model.Ads) {
+    <table class="table table-hover">
+        <thead>
             <tr>
-                <td>
-                    <a href="/AdvertisementModel/Details/@item.ID"><img src="~/UploadedFiles/@item.Files.Path" height="50" /></a>
-                </td>
-                <td>
-                    @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                    @if (item.ToNegotiate == true) {
-                        @Html.Raw(" do negocjacji");
-                    }
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.AddTime)
-                </td>
-                <td>
-                    @if (item.Active == true) {
-                        @Html.Raw("Tak")
-                    }
-                    else {
-                        @Html.Raw("Nie")
-                    }
-                </td>
-                <td>
-                    @Html.ActionLink("Edytuj", "Edit", new { id = item.ID, controller = "AdvertisementModel" }) |
-                    @Html.ActionLink("Usuń", "Delete", new { id = item.ID, controller = "AdvertisementModel" }) |
-                    @if (item.Active == true) {
-                        @Html.ActionLink("Zakończ", "Deactivate", new { id = item.ID, controller = "AdvertisementModel" })
-                    }
-                    else {
-                        @Html.ActionLink("Wznów", "Activate", new { id = item.ID, controller = "AdvertisementModel" })
-                    }
+                <th scope="col">
+                    Minitura
+                </th>
+                <th scope="col">
+                    Ogłoszenie
+                </th>
 
-                </td>
+                <th scope="col">
+                    Cena
+                </th>
+                <th scope="col">Data dodania</th>
+                <th scope="col">Aktywne</th>
+                <th scope="col"></th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Ads) {
+                <tr>
+                    <td>
+                        <a href="/AdvertisementModel/Details/@item.ID"><img src="~/UploadedFiles/@item.Files.Path" height="50" /></a>
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price) zł
+                        @if (item.ToNegotiate == true) {
+                            <button type="button" class="btn btn-success btn-sm" disabled>do negocjacji</button>
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.AddTime)
+                    </td>
+                    <td>
+                        @if (item.Active == true) {
+                            @Html.Raw("Tak")
+                        }
+                        else {
+                            @Html.Raw("Nie")
+                        }
+                    </td>
+                    <td>
+                        <a href="/AdvertisementModel/Edit/@Html.DisplayFor(i => item.ID)"><button type="button" class="btn btn-success btn-sm">Edytuj</button></a>
+                        <a href="/AdvertisementModel/Delete/@Html.DisplayFor(i => item.ID)"><button type="button" class="btn btn-success btn-sm">Usuń</button></a>
+                        @if (item.Active == true) {
+                            <a href="/AdvertisementModel/Deactivate/@Html.DisplayFor(i => item.ID)"><button type="button" class="btn btn-success btn-sm">Zakończ</button></a>
+                        }
+                        else {
+                            <a href="/AdvertisementModel/Activate/@Html.DisplayFor(i => item.ID)"><button type="button" class="btn btn-success btn-sm">Wznów</button></a>
+                        }
+
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 }
 else {
-    <h4>Brak ogłoszeń</h4>
+    <center><h4>Brak ogłoszeń</h4></center>
 }
 <br />
 <br />
 <h3>Ulubione</h3>
 @if (ViewBag.favouritesShow == true) {
-<table class="table">
-    <tr>
-        <th>
-            Minitura
-        </th>
-        <th>
-            Ogłoszenie
-        </th>
-
-        <th>
-            Cena
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model.Favs) {
-        <tr>
-            <td>
-                <a href="/AdvertisementModel/Details/@item.Advertisement.ID"><img src="~/UploadedFiles/@item.Advertisement.Files.Path" height="50" /></a>
-            </td>
-            <td>
-                @Html.ActionLink(item.Advertisement.Title, "Details", new { id = item.Advertisement.ID, controller = "AdvertisementModel" })
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Advertisement.Price)
-                @if (item.Advertisement.ToNegotiate == true) {
-                    @Html.Raw(" do negocjacji");
-                }
-            </td>
-
-            <td>
-                @Html.ActionLink("Usuń z ulubionych", "RemoveFromFavourites", new { id = item.Advertisement.ID, redirect = 0, controller = "UserModel" })
-            </td>
-        </tr>
-    }
-</table>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th scope="col">Miniatura</th>
+                <th scope="col">Ogłoszenie</th>
+                <th scope="col">Cena</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Favs) {
+                <tr>
+                    <td width="100">
+                        <a href="/AdvertisementModel/Details/@Html.DisplayFor(i => item.Advertisement.ID)"><img src="~/UploadedFiles/@item.Advertisement.Files.Path" height="50" /></a>
+                    </td>
+                    <td>
+                        @Html.ActionLink(item.Advertisement.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
+                    </td>
+                    <td width="200">
+                        @Html.DisplayFor(modelItem => item.Advertisement.Price) zł
+                        @if (item.Advertisement.ToNegotiate == true) {
+                            <button type="button" class="btn btn-success btn-sm" disabled>do negocjacji</button>
+                        }
+                    </td>
+                    <td width="200">
+                        <a href="/UserModel/RemoveFromFavourites/@Html.DisplayFor(i => item.Advertisement.ID)?redirect=0"><button type="button" class="btn btn-success btn-sm">Usuń z ulubionych</button></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 else {
-    <h4>Brak ulubionych</h4>
+    <center><h4>Brak ulubionych</h4></center>
 }

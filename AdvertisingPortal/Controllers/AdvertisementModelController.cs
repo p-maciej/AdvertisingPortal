@@ -89,6 +89,7 @@ namespace AdvertisingPortal.Controllers
             IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
             int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == user.Id).Count();
             ViewBag.showAdminitiveTools = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator");
+            ViewBag.showEditButton = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator") || user.Id == ad.User.ID;
             ViewBag.AddedToFavourites = check > 0;
             return View(ad);
         }

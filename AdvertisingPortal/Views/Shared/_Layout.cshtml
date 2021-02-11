@@ -4,52 +4,56 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
+    <link rel="icon" href="~/Content/img/logo_100.png">
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
 
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("Ogłoszenia", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Strona główna", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Kategorie", "Index", "CategoryModel")</li>
-                    <li>@Html.ActionLink("Kontakt", "Contact", "Home")</li>
-                    <!--<li>@Html.ActionLink("Ulubione", "Index", "FavouriteModel")</li>
-                    <li>@Html.ActionLink("Pliki", "Index", "FileModel")</li>-->
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
-            @if (@User.IsInRole("admin")) {
-                <div class="navbar-collapse collapse">
-                    <ul class="nav navbar-nav">
-                        <li>@Html.ActionLink("Panel administracyjny", "Index", "Home")</li>
-                        <li>@Html.ActionLink("Kategorie", "AdminView", "CategoryModel")</li>
-                        <li>@Html.ActionLink("Użytkownicy", "Index", "UserModel")</li>
-                    </ul>
-                </div>
-            }
-            </div>
-    </div>
-    <div class="container body-content" @if (@User.IsInRole("admin")) { @Html.Raw("style='margin-top: 80px;'") }>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <img src="~/Content/img/logo_100.png" height="50" style="margin-right: 5px;"/>
+        @Html.ActionLink("Ogłoszenia", "Index", "Home", new { @class = "navbar-brand" })
+
+        <div style="margin-left: 50px" class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-link">
+                    @Html.ActionLink("Strona główna", "Index", "Home")
+                </li>
+                <li class="nav-link">
+                    @Html.ActionLink("Kategorie", "Index", "CategoryModel")
+                </li>
+                <li class="nav-link">
+                    @Html.ActionLink("Kontakt", "Contact", "Home")
+                </li>
+                @if (@User.IsInRole("admin")) {
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Panel administracyjny</a>
+                        <div class="dropdown-menu">
+                            <a href="/CategoryModel/AdminView/" class="dropdown-item">Kategorie</a>
+                            <a href="/UserModel/Index/" class="dropdown-item">Użytkownicy</a>
+                        </div>
+                    </li>
+                }
+            </ul>
+
+            @Html.Partial("_LoginPartial")
+            <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Szukaj...">
+                <button class="btn btn-secondary my-2 my-sm-0" type="submit">Szukaj</button>
+            </form>
+        </div>
+    </nav>
+
+    <div class="container body-content">
         @RenderBody()
         <hr />
         <footer>
-            <p>Maciej Pawlak &copy; @DateTime.Now.Year</p>
+            <p align="center">Maciej Pawlak &copy; @DateTime.Now.Year</p>
         </footer>
     </div>
 
-    @Scripts.Render("~/bundles/jquery")
-    @Scripts.Render("~/bundles/bootstrap")
-    @RenderSection("scripts", required: false)
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
 </body>
 </html>

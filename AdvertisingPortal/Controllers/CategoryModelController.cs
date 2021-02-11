@@ -58,7 +58,7 @@ namespace AdvertisingPortal.Controllers
                 db.Categories.Add(category);
                 db.SaveChanges();
 
-                return RedirectToAction("Index");
+                return RedirectToAction("AdminView");
             }
             return View(category);
         }

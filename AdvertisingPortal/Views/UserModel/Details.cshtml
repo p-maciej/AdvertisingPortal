@@ -1,18 +1,16 @@
 ﻿@model AdvertisingPortal.Models.CompleteUserModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Szczegóły użytkownika - " + @Html.DisplayFor(model => model.user.Email);
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
-
 <div>
-    <h4>UserModel</h4>
+    <h4>Szczegóły użytkownika</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.user.Email)
+            E-mail
         </dt>
 
         <dd>
@@ -20,7 +18,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.FirstName)
+            Imię
         </dt>
 
         <dd>
@@ -28,7 +26,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.LastName)
+            Nazwisko
         </dt>
 
         <dd>
@@ -36,7 +34,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.PhoneNumber)
+            Numer telefonu
         </dt>
 
         <dd>
@@ -44,7 +42,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.City)
+            Miasto
         </dt>
 
         <dd>
@@ -54,14 +52,14 @@
         <dt>
             Grupy:
         </dt>
-
-        @foreach (var item in ViewBag.roles) {
-            <dd>@item.RoleName</dd>
-        }
-    </dl>
+        <dd>
+            @foreach (var item in ViewBag.roles) {
+                @Html.Raw(@item.RoleName + ", ")
+            }
+        </dd>
+        </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.user.Id }) |
-    @Html.ActionLink("Delete", "Delete", new { id = Model.user.Id }) |
-    @Html.ActionLink("Back to List", "Index")
+    <a href="/UserModel/Edit/@Html.DisplayFor(modelItem => Model.user.Id )"><button type="button" class="btn btn-success btn-sm">Edytuj</button></a>
+    <a href="/UserModel/ConfirmDelete/@Html.DisplayFor(modelItem => Model.user.Id )"><button type="button" class="btn btn-success btn-sm">Usuń</button></a>
 </p>

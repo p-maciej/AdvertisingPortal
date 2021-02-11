@@ -1,61 +1,63 @@
 ﻿@model IEnumerable<AdvertisingPortal.Models.CompleteUserModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Panel administracyjny - użytkownicy";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Użytkownicy</h2>
 <br />
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(Model => Model.user.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.user.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.userInfo.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.userInfo.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.userInfo.PhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(Model => Model.userInfo.City)
-        </th>
-        <th></th>
-    </tr>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">
+                ID
+            </th>
+            <th scope="col">
+                E-mail
+            </th>
+            <th scope="col">
+                Imię
+            </th>
+            <th scope="col">
+                Nazwisko
+            </th>
+            <th scope="col">
+                Numer telefonu
+            </th>
+            <th scope="col">
+                Miasto
+            </th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
 
-    @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.user.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.user.Email)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.userInfo.FirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.userInfo.LastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.userInfo.PhoneNumber)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.userInfo.City)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.user.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.user.Id }) |
-            @Html.ActionLink("Delete", "ConfirmDelete", new { id = item.user.Id })
-        </td>
-    </tr>
-    }
+        @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user.Id)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.user.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userInfo.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userInfo.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userInfo.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.userInfo.City)
+                </td>
+                <td>
+                    <a href="/UserModel/Edit/@Html.DisplayFor(modelItem => item.user.Id )"><button type="button" class="btn btn-success btn-sm">Edytuj</button></a>
+                    <a href="/UserModel/Details/@Html.DisplayFor(modelItem => item.user.Id )"><button type="button" class="btn btn-success btn-sm">Szczegóły</button></a>
+                    <a href="/UserModel/ConfirmDelete/@Html.DisplayFor(modelItem => item.user.Id )"><button type="button" class="btn btn-success btn-sm">Usuń</button></a>
+                </td>
+            </tr>
+        }
 
 </table>

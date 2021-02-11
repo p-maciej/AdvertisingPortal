@@ -20,7 +20,7 @@ namespace AdvertisingPortal {
                       "~/Scripts/bootstrap.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
+                      "~/Content/pbootstrap.css",
                       "~/Content/site.css"));
         }
     }

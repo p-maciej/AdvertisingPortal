@@ -1,19 +1,16 @@
 ﻿@model AdvertisingPortal.Models.CompleteUserModel
 
 @{
-    ViewBag.Title = "ConfirmDelete";
+    ViewBag.Title = "Usuwanie użytkownika - "+ @Html.DisplayFor(model => model.user.Email);
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Delete</h2>
-
-<h3>Are you sure you want to delete this?</h3>
+<h3>Jesteś pewien, że chcesz usunąć tego użytkownika?</h3>
 <div>
-    <h4>UserModel</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.user.Email)
+            E-mail
         </dt>
 
         <dd>
@@ -21,7 +18,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.FirstName)
+            Imię
         </dt>
 
         <dd>
@@ -29,7 +26,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.LastName)
+            Nazwisko
         </dt>
 
         <dd>
@@ -37,7 +34,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.PhoneNumber)
+            Numer telefonu
         </dt>
 
         <dd>
@@ -45,21 +42,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.userInfo.City)
+            Miasto
         </dt>
 
         <dd>
             @Html.DisplayFor(model => model.userInfo.City)
         </dd>
-
     </dl>
 
     @using (Html.BeginForm(Model.user.Id, "UserModel/Delete")) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            <input type="submit" value="Usuń" class="btn btn-primary" />
         </div>
     }
 </div>

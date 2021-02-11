@@ -1,93 +1,47 @@
 ﻿@model AdvertisingPortal.Models.AdvertisementModel
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Ogłoszenie - " + Html.DisplayFor(i => Model.Title);
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<div style="float: left; width: 500px">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active">@Html.DisplayFor(model => model.Category.Name)</li>
+    </ol>
+    <img src="~/UploadedFiles/@Html.DisplayFor(model => model.Files.Path)" width="500" />
 
-<div>
-    <h4>AdvertisementModel</h4>
     <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Content)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Content)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.ToNegotiate)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.ToNegotiate)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.AddTime)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.AddTime)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category)
-
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Category.Name)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.User)
-
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName)
-        </dd>
-        <dt></dt>
-        <dd>
+    <h4 style="float:left">@Html.DisplayFor(model => model.Title)</h4>
+    <p style="float:right" align="right">@Html.DisplayFor(model => model.AddTime)</p>
+    <div style="clear: left"></div>
+    <div class="jumbotron" style="white-space: pre-line; padding: 0px 10px 50px 20px">
+        @Html.DisplayFor(model => model.Content)
+    </div>
+</div>
+<div style="float: right; text-align: left; width:400px">
+    <div class="card mb-3">
+        <h3 class="card-header">Cena: @Html.DisplayFor(model => model.Price) zł <p style="font-size:15px; margin: 0">@if (Model.ToNegotiate == true) {@Html.Raw("do negocjacji")}</p></h3>
+        <div class="card-body">
+            <h5 class="card-title">Dodane przez:</h5>
+            <h6 class="card-subtitle text-muted">@Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName)</h6>
+        </div>
+        <ul class="list-group list-group-flush">
             @if (ViewBag.AddedToFavourites == false) {
-                @Html.ActionLink("Dodaj do ulubionych", "AddToFavourite", new { id = Model.ID, controller = "UserModel" })
+                <li class="list-group-item"><p align="right"><a href="/UserModel/AddToFavourite/@Html.DisplayFor(i => Model.ID)"><button class="btn btn-secondary btn-sm">Dodaj do ulubionych</button></a></p></li>
             }
             else {
-                @Html.ActionLink("Usuń z ulubionych", "RemoveFromFavourites", new { id = Model.ID, redirect = 1, controller = "UserModel" })
+                <li class="list-group-item"><p align="right"><a href="/UserModel/RemoveFromFavourites/@Html.DisplayFor(i => Model.ID)?redirect=1"><button class="btn btn-secondary btn-sm">Usuń z ulubionych</button></a></p></li>
             }
-        </dd>
-        <dt>
-
-
-        </dt>
-        <dd>
-            <img src="~/UploadedFiles/@Html.DisplayFor(model => model.Files.Path)" height="400" />
-        </dd>
-
-        @if (ViewBag.showAdminitiveTools == true) {
-            @Html.ActionLink("Usuń", "Delete", new { id = Model.ID })
-        }
-
-    </dl>
+        </ul>
+        <div class="card-body" style="text-align: right">
+            @if (ViewBag.showAdminitiveTools == true) {
+                @Html.ActionLink("Usuń", "Delete", new { id = Model.ID }, htmlAttributes: new { @class = "card-link" })
+            }
+            @if (ViewBag.showEditButton == true) {
+                @Html.ActionLink("Edytuj", "Edit", new { id = Model.ID }, htmlAttributes: new { @class = "card-link" })
+            }
+            </div>
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID })
-</p>
+<div style="clear:both"></div>
