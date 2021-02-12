@@ -26,22 +26,28 @@
             <h5 class="card-title">Dodane przez:</h5>
             <h6 class="card-subtitle text-muted">@Html.DisplayFor(model => model.User.FirstName) @Html.DisplayFor(model => model.User.LastName)</h6>
         </div>
-        <ul class="list-group list-group-flush">
-            @if (ViewBag.AddedToFavourites == false) {
-                <li class="list-group-item"><p align="right"><a href="/UserModel/AddToFavourite/@Html.DisplayFor(i => Model.ID)"><button class="btn btn-secondary btn-sm">Dodaj do ulubionych</button></a></p></li>
-            }
-            else {
-                <li class="list-group-item"><p align="right"><a href="/UserModel/RemoveFromFavourites/@Html.DisplayFor(i => Model.ID)?redirect=1"><button class="btn btn-secondary btn-sm">Usuń z ulubionych</button></a></p></li>
-            }
-        </ul>
-        <div class="card-body" style="text-align: right">
-            @if (ViewBag.showAdminitiveTools == true) {
-                @Html.ActionLink("Usuń", "Delete", new { id = Model.ID }, htmlAttributes: new { @class = "card-link" })
-            }
-            @if (ViewBag.showEditButton == true) {
-                @Html.ActionLink("Edytuj", "Edit", new { id = Model.ID }, htmlAttributes: new { @class = "card-link" })
-            }
+        @if (ViewBag.ShowFavouritesButton) {
+            <ul class="list-group list-group-flush">
+
+                @if (ViewBag.AddedToFavourites == false) {
+                    <li class="list-group-item"><p align="right"><a href="/UserModel/AddToFavourite/@Html.DisplayFor(i => Model.ID)"><button class="btn btn-secondary btn-sm">Dodaj do ulubionych</button></a></p></li>
+                }
+                else {
+                    <li class="list-group-item"><p align="right"><a href="/UserModel/RemoveFromFavourites/@Html.DisplayFor(i => Model.ID)?redirect=1"><button class="btn btn-secondary btn-sm">Usuń z ulubionych</button></a></p></li>
+                }
+
+            </ul>
+        }
+        @if (ViewBag.showAdminitiveTools || ViewBag.showEditButton) {
+            <div class="card-body" style="text-align: right">
+                @if (ViewBag.showAdminitiveTools == true) {
+                    @Html.ActionLink("Usuń", "Delete", new { id = Model.ID }, htmlAttributes: new { @class = "card-link" })
+                }
+                @if (ViewBag.showEditButton == true) {
+                    @Html.ActionLink("Edytuj", "Edit", new { id = Model.ID }, htmlAttributes: new { @class = "card-link" })
+                }
             </div>
-    </div>
+        }
+        </div>
 </div>
 <div style="clear:both"></div>

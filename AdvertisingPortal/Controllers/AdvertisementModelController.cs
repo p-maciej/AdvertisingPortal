@@ -18,6 +18,29 @@ namespace AdvertisingPortal.Controllers
         private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
         private static Random random = new Random();
 
+        public ActionResult Index(string search) {
+            var advertisements = db.Advertisements.Where(a => a.Active == true && a.Title.ToLower().Contains(search.ToLower())).Include(a => a.Files).OrderByDescending(b => b.AddTime);
+
+            if (advertisements.Count() > 0) {
+                ViewBag.display = true;
+            }
+            else {
+                ViewBag.display = false;
+            }
+
+            if (search != null && search.Length > 0) {
+                ViewBag.displaySearchInfo = true;
+                ViewBag.searchInfo = search;
+            }
+            else {
+                ViewBag.displaySearchInfo = false;
+                ViewBag.searchInfo = "";
+            }
+
+            return View(advertisements.ToList());
+        }
+
+
         [Authorize]
         public ActionResult Create() {
             ViewBag.categories = db.Categories.ToList();
@@ -86,11 +109,19 @@ namespace AdvertisingPortal.Controllers
         public ActionResult Details(int id) {
             AdvertisementModel ad = db.Advertisements.Where(s => s.ID == id).Include(s => s.Category).Include(a => a.Files).Include(u => u.User).FirstOrDefault();
 
-            IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
-            int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == user.Id).Count();
-            ViewBag.showAdminitiveTools = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator");
-            ViewBag.showEditButton = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator") || user.Id == ad.User.ID;
-            ViewBag.AddedToFavourites = check > 0;
+            int find = appdb.Users.Where(s => s.Email == User.Identity.Name).Count();
+            if (find > 0) {
+                IdentityUser user = appdb.Users.Where(s => s.Email == User.Identity.Name).First();
+                int check = db.Favourites.Where(f => f.Advertisement.ID == id && f.User.ID == user.Id).Count();
+                ViewBag.showAdminitiveTools = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator");
+                ViewBag.showEditButton = userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator") || user.Id == ad.User.ID;
+                ViewBag.AddedToFavourites = check > 0;
+                ViewBag.ShowFavouritesButton = true;
+            } else {
+                ViewBag.showAdminitiveTools = false;
+                ViewBag.showEditButton = false;
+                ViewBag.ShowFavouritesButton = false;
+            }
             return View(ad);
         }
 
