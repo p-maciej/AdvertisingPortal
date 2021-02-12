@@ -19,7 +19,12 @@ namespace AdvertisingPortal.Controllers
         private static Random random = new Random();
 
         public ActionResult Index(string search) {
-            var advertisements = db.Advertisements.Where(a => a.Active == true && a.Title.ToLower().Contains(search.ToLower())).Include(a => a.Files).OrderByDescending(b => b.AddTime);
+            IEnumerable<AdvertisementModel> advertisements;
+
+            if (search != null && search.Length > 0)
+                advertisements = db.Advertisements.Where(a => a.Active == true && a.Title.ToLower().Contains(search.ToLower())).Include(a => a.Files).OrderByDescending(b => b.AddTime);
+            else
+                advertisements = db.Advertisements.Where(a => a.Active == true).Include(a => a.Files).OrderByDescending(b => b.AddTime);
 
             if (advertisements.Count() > 0) {
                 ViewBag.display = true;
@@ -253,6 +258,10 @@ namespace AdvertisingPortal.Controllers
                 if (advertisement.User.ID == userInfo.ID || userManager.IsInRole(user.Id, "admin") || userManager.IsInRole(user.Id, "moderator")) {
                     try {
                         
+                        foreach(var fav in advertisement.Favourites.ToList()) {
+                            db.Favourites.Remove(fav);
+                        }
+
                         string strPhysicalFolder = Server.MapPath("~/UploadedFiles/");
 
                         string strFileFullPath = strPhysicalFolder + advertisement.Files.Path;

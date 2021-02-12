@@ -127,9 +127,13 @@ namespace AdvertisingPortal.Controllers {
                 UserModel user = db.Users.Find(id);
                 ApplicationUser identity = appdb.Users.Find(id);
                 try {
-                    var userAds = db.Advertisements.Where(u => u.User.ID == user.ID).ToList();
+                    var userAds = db.Advertisements.Where(u => u.User.ID == user.ID).Include(s => s.Favourites).ToList();
 
                     foreach(var ad in userAds) {
+                        foreach (var fav in ad.Favourites.ToList()) {
+                            db.Favourites.Remove(fav);
+                        }
+
                         string strPhysicalFolder = Server.MapPath("~/UploadedFiles/");
 
                         string strFileFullPath = strPhysicalFolder + ad.Files.Path;
