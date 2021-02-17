@@ -33,10 +33,10 @@
                     <td>
                         <a href="/AdvertisementModel/Details/@item.ID"><img src="~/UploadedFiles/@item.Files.Path" height="50" /></a>
                     </td>
-                    <td>
+                    <td style="max-width: 400px">
                         @Html.ActionLink(item.Title, "Details", new { id = item.ID, controller = "AdvertisementModel" })
                     </td>
-                    <td>
+                    <td style="max-width: 120px">
                         @Html.DisplayFor(modelItem => item.Price) zł
                         @if (item.ToNegotiate == true) {
                             <button type="button" class="btn btn-success btn-sm" disabled>do negocjacji</button>

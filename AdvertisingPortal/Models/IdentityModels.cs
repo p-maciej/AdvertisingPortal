@@ -29,7 +29,7 @@ namespace AdvertisingPortal.Models {
 
     public class IdentityDBInizializer<T> : CreateDatabaseIfNotExists<ApplicationDbContext> {
         protected override void Seed(ApplicationDbContext context) {
-            context.Roles.Add(new IdentityRole { Name = "manager" });
+            context.Roles.Add(new IdentityRole { Name = "moderator" });
             context.Roles.Add(new IdentityRole { Name = "admin" });
             context.Roles.Add(new IdentityRole { Name = "user" });
             context.SaveChanges();

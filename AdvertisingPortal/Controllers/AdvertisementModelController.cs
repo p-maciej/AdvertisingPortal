@@ -173,7 +173,7 @@ namespace AdvertisingPortal.Controllers
                 db.Entry(ad).State = EntityState.Modified;
                 db.SaveChanges();
 
-                return RedirectToAction("UserDetails", "Home");
+                return RedirectToAction("Details/"+advertisement.Ad.ID, "AdvertisementModel");
             }
 
             List<SelectListItem> cat1 = new List<SelectListItem>();

@@ -16,7 +16,7 @@ namespace AdvertisingPortal.Controllers {
         private UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
 
         public ActionResult Index() {
-            var advertisements = db.Advertisements.Where(a => a.Active == true).Include(a => a.Files).OrderByDescending(b => b.AddTime).Take(30);
+            var advertisements = db.Advertisements.Where(a => a.Active == true).Include(a => a.Files).OrderByDescending(b => b.AddTime).Take(8);
 
             if(advertisements.Count() > 0) {
                 ViewBag.display = true;

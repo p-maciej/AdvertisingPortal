@@ -112,6 +112,25 @@ namespace AdvertisingPortal.Controllers
             if (ModelState.IsValid) {
                 CategoryModel category = db.Categories.Find(id);
                 try {
+                    var userAds = db.Advertisements.Where(u => u.Category.ID == category.ID).Include(s => s.Favourites).ToList();
+
+                    foreach (var ad in userAds) {
+                        foreach (var fav in ad.Favourites.ToList()) {
+                            db.Favourites.Remove(fav);
+                        }
+
+                        string strPhysicalFolder = Server.MapPath("~/UploadedFiles/");
+
+                        string strFileFullPath = strPhysicalFolder + ad.Files.Path;
+                        if (System.IO.File.Exists(strFileFullPath)) {
+                            System.IO.File.Delete(strFileFullPath);
+                        }
+
+                        db.Files.Remove(ad.Files);
+
+                        db.Advertisements.Remove(ad);
+                    }
+
                     db.Categories.Remove(category);
                     db.SaveChanges();
                 } catch {
@@ -119,7 +138,7 @@ namespace AdvertisingPortal.Controllers
                     return View(category);
                 }
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("AdminView");
         }
     }
 }

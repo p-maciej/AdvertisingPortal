@@ -162,7 +162,7 @@ namespace AdvertisingPortal.Controllers
                 db.SaveChanges();
                 ApplicationDbContext appdb = new ApplicationDbContext();
                 var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(appdb));
-                var role = appdb.Roles.SingleOrDefault(m => m.Name == "admin");
+                var role = appdb.Roles.SingleOrDefault(m => m.Name == "user");
                 ApplicationUser user2 = userManager.FindByName(model.registerInfo.Email);
 
                 userManager.AddToRole(user2.Id, role.Name);
