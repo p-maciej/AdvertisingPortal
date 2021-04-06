@@ -17,7 +17,7 @@
   <li>Adding / editing / removing categories</li>
 </ul>
 
-<h3>Screenshots:</h3>
+<h2>Screenshots:</h2>
 
 ![screenshot](/AdvertisingPortal/Images/Screenshots/advertisingPortal_ss_2.png)
 
